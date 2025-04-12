@@ -1,37 +1,37 @@
 class SudokuSolver:
     def __init__(self, grid_str):
-        """通过字符串初始化数独
+        """Initialize Sudoku from a string
         Args:
-            grid_str: 数独表格字符串，每行用/分隔，每个数字直接输入，0表示空位
+            grid_str: Sudoku grid string, each row separated by '/', each digit directly input, 0 represents empty cell
         """
-        # 解析输入的grid字符串
+        # Parse the input grid string
         rows = grid_str.strip().split('/')
         self.grid = []
         for row in rows:
-            if not row.strip():  # 跳过空行
+            if not row.strip():  # Skip empty rows
                 continue
-            # 将每个字符转换为数字
+            # Convert each character to number
             numbers = [int(char) for char in row.strip()]
             self.grid.append(numbers)
             
-        self.n = len(self.grid[0])  # 使用第一行的长度作为n
-        self.box_size = int(self.n ** 0.5)  # 小方格的大小
+        self.n = len(self.grid[0])  # Use the length of the first row as n
+        self.box_size = int(self.n ** 0.5)  # Size of the sub-grid
         
-        # 验证输入的格式是否正确
+        # Validate the input format
         if not all(len(row) == self.n for row in self.grid):
-            raise ValueError("每行的数字数量必须相同")
+            raise ValueError("Each row must have the same number of digits")
     
     def is_valid(self, row, col, num):
-        """检查在指定位置放置数字是否有效"""
-        # 检查行
+        """Check if placing a number at the specified position is valid"""
+        # Check row
         if num in self.grid[row]:
             return False
             
-        # 检查列
+        # Check column
         if num in [self.grid[i][col] for i in range(self.n)]:
             return False
             
-        # 检查小方格
+        # Check sub-grid
         box_row = (row // self.box_size) * self.box_size
         box_col = (col // self.box_size) * self.box_size
         for i in range(box_row, box_row + self.box_size):
@@ -42,7 +42,7 @@ class SudokuSolver:
         return True
     
     def find_empty(self):
-        """找到一个空位置（值为0的格子）"""
+        """Find an empty cell (value 0)"""
         for i in range(self.n):
             for j in range(self.n):
                 if self.grid[i][j] == 0:
@@ -50,7 +50,7 @@ class SudokuSolver:
         return None
     
     def solve(self):
-        """解决数独"""
+        """Solve the Sudoku puzzle"""
         empty = self.find_empty()
         if not empty:
             return True
@@ -66,7 +66,7 @@ class SudokuSolver:
         return False
     
     def print_grid(self):
-        """打印数独网格"""
+        """Print the Sudoku grid"""
         for i in range(self.n):
             if i % self.box_size == 0 and i != 0:
                 print("-" * (self.n * 2 + self.box_size + 1))
